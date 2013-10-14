@@ -33,6 +33,20 @@ The above would be the equivalent of::
     - name: add user testuser2
       user: name=testuser2 state=present groups=wheel
 
+The with_items can also take a hash and each item will be a hash with 'key' and 'value' entries::
+
+    - name: add several users
+      user: name={{ item.key }} comment={{ item.value.name }} state=present groups=wheel
+      with_items:
+         bob:
+            name: Bob Woodward
+         carl:
+            name: Carl Bernstein
+
+If you have defined a YAML hash in a variables file, or the 'vars' section, you can also do::
+
+    with_items: somehash
+
 The yum and apt modules use with_items to execute fewer package manager transactions.
 
 Note that the types of items you iterate over with 'with_items' do not have to be simple lists of strings.

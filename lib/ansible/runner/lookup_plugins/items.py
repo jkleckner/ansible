@@ -36,8 +36,13 @@ class LookupModule(object):
     def run(self, terms, inject=None, **kwargs):
         terms = utils.listify_lookup_plugin_terms(terms, self.basedir, inject) 
 
+        if isinstance(terms, dict):
+            # This way if want tuples: item[0] or item[1].name
+            #terms = [i for i in terms.iteritems]
+            # This way if want hash: item.key or item.value.name
+            terms = [{"key":i[0], "value":i[1]} for i in terms.iteritems]
         if not isinstance(terms, list):
-            raise errors.AnsibleError("with_items expects a list")
+            raise errors.AnsibleError("with_items expects a list or a hash")
 
         return flatten(terms)
 
